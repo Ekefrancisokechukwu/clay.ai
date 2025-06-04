@@ -60,7 +60,7 @@ const Faqs = () => {
           initial={{ y: 50, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
           transition={{ type: "spring", ...springValues }}
-          className="md:text-start !text-center"
+          className="md:text-start text-center"
         >
           <SectionMiniHeading>FAQs</SectionMiniHeading>
           <div className="mt-6" />
