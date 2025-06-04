@@ -4,6 +4,7 @@ import crm2 from "assets/images/crm-2.avif";
 
 import { motion } from "motion/react";
 import { springValues } from "./TiltCard";
+import Heading from "./Heading";
 
 const lists = [
   "Engagement tracking",
@@ -32,9 +33,10 @@ const CrmSection = () => {
           <div>
             <SectionMiniHeading>CRM Design</SectionMiniHeading>
           </div>
-          <h2 className="font-semibold text-5xl mt-3">
-            Designed to Take the Pain Out of Contacts
-          </h2>
+          <div className="font-semibold text-5xl mt-3">
+            <Heading text=" Designed to Take the Pain Out of Contacts" />
+          </div>
+
           <p className="mt-5 paragraphy">
             Organize your team’s media lists in one tool and see how each
             contact engages with your campaigns.

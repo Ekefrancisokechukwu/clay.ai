@@ -7,7 +7,7 @@ import SectionMiniHeading from "components/SectionMiniHeading";
 
 export const Hero = () => {
   return (
-    <section className="pt-[5rem] px-5 pb-[3rem] relative overflow-hidden">
+    <section className="pt-[8rem] px-5 pb-[3rem] relative overflow-hidden">
       <div className="w-full rounded-full h-[10rem] top-[-5rem]  absolute blur-2xl  bg-radial-[at_50%_75%] from-sky-200/40 via-blue-400/45 to-indigo-900 to-90%" />
       <div className="wrapper flex lg:flex-row flex-col gap-y-14 justify-between items-center">
         <div className="max-w-[30rem]">
@@ -23,7 +23,10 @@ export const Hero = () => {
               Top selling on Framer
             </SectionMiniHeading>
           </motion.div>
-          <Heading />
+          <Heading
+            text="Boost your Productivity with Creative AIs
+"
+          />
           <motion.p
             initial={{ opacity: 0, translateY: 50 }}
             animate={{ opacity: 1, translateY: 0 }}

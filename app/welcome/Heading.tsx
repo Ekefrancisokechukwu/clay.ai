@@ -1,15 +1,15 @@
 import { springValues } from "./TiltCard";
 import { motion } from "motion/react";
 
-const Heading = () => {
+const Heading = ({ text }: { text: string }) => {
   return (
     <motion.h1
       initial={{ opacity: 0, translateY: 50 }}
       animate={{ opacity: 1, translateY: 0 }}
       transition={{ type: "spring", delay: 0.2, ...springValues }}
-      className="mt-5  text-5xl font-semibold"
+      className="mt-5  sm:text-5xl text-3xl font-semibold"
     >
-      Boost your Productivity with Creative AIs
+      {text}
     </motion.h1>
   );
 };

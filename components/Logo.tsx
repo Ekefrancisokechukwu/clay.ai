@@ -11,7 +11,7 @@ export const Logo = ({ className }: logoProps) => {
       <Link
         to={"#"}
         className={twMerge(
-          "inline-block  text-[10rem] cursor-default font-semibold bg-clip-text bg-gradient-to-r text-transparent from-white to-gray-400/50",
+          "inline-block  sm:text-[10rem] text-[5rem] cursor-default font-semibold bg-clip-text bg-gradient-to-r text-transparent from-white to-gray-400/50",
           className
         )}
       >

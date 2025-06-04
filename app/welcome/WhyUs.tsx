@@ -1,8 +1,14 @@
 import SectionMiniHeading from "components/SectionMiniHeading";
 import us1 from "assets/images/us-1.avif";
 import us2 from "assets/images/us-2.avif";
-import { motion } from "motion/react";
-import { springValues } from "./TiltCard";
+import {
+  motion,
+  useMotionTemplate,
+  useMotionValue,
+  useSpring,
+} from "motion/react";
+import { useEffect, useRef } from "react";
+import { twMerge } from "tailwind-merge";
 
 const variantChildFirst = {
   onHover: { rotateY: "-15deg", skewY: -5 },
@@ -11,31 +17,36 @@ const variantChildFirst = {
 const variantChildSecond = {
   onHover: { rotateX: "15deg", skewY: 5 },
 };
+const springValues = {
+  stiffness: 300,
+  damping: 30,
+  mass: 1,
+};
 
 const WhyUs = () => {
   return (
     <section className="px-5 py-[3rem]">
       <div className="wrapper">
+        {/* Bento Grid */}
+
         <motion.div
+          viewport={{ once: true, amount: 0.5 }}
           initial={{ y: 50, opacity: 0 }}
           whileInView={{ y: 0, opacity: 1 }}
-          viewport={{ once: true, amount: 0 }}
           transition={{ type: "spring", ...springValues }}
-          className="text-center  max-w-[40rem] mx-auto"
+          className="md:text-start !text-center"
         >
-          <SectionMiniHeading>Why Choose ClayAI</SectionMiniHeading>
-          <h2 className="heading mt-2">Your Ultimate AI Solution</h2>
-          <p className="paragraphy mt-3 ">
-            his customization enhances the utility and adaptability of ClayAI,
-            making it a versatile tool across various professional and creative
-            contexts.
+          <SectionMiniHeading>FAQs</SectionMiniHeading>
+          <div className="mt-6" />
+          <h2 className="heading ">Frequently Asked Questions</h2>
+          <p className="paragraphy mt-3">
+            In the digital age, your voice on social media is your brand's
+            heartbeat.
           </p>
         </motion.div>
 
-        {/* Bento Grid */}
-
         <div className="mt-[2rem]  grid  sm:grid-cols-6 grid-cols-1 auto-rows-[minmax(5em,_1fr)] gap-5">
-          <div className="border z-10 relative overflow-hidden border-gray-600/60 rounded-lg p-8 col-span-3 row-span-2">
+          <GridItemWrapper className="col-span-3 row-span-2">
             <div
               style={{
                 background:
@@ -70,13 +81,9 @@ const WhyUs = () => {
               No in-app analytics. No middle servers. Your prompt are sent
               directly to budget.
             </p>
-          </div>
+          </GridItemWrapper>
 
-          <motion.div
-            variants={{ onhover: {} }}
-            whileHover={"onHover"}
-            className="border  perspective-midrange  overflow-hidden relative border-gray-600/60   rounded-lg p-8 col-span-3 sm:col-start-4 md:row-span-5 row-span-4"
-          >
+          <GridItemWrapper className=" perspective-midrange  overflow-hidden    col-span-3 sm:col-start-4 md:row-span-5 row-span-4">
             <div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -121,13 +128,9 @@ const WhyUs = () => {
             >
               <img src={us1} alt="use asset" className="w-full object-cover" />
             </motion.div>
-          </motion.div>
+          </GridItemWrapper>
 
-          <motion.div
-            variants={{ onhover: {} }}
-            whileHover={"onHover"}
-            className="border overflow-hidden relative border-gray-600/60   rounded-lg p-8 col-span-3 row-start-3 md:row-span-5 row-span-4"
-          >
+          <GridItemWrapper className=" col-span-3 row-start-3 md:row-span-5 row-span-4">
             <div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -166,9 +169,9 @@ const WhyUs = () => {
             >
               <img src={us2} alt="use asset" className="w-full object-cover" />
             </motion.div>
-          </motion.div>
+          </GridItemWrapper>
 
-          <div className="border border-gray-600/60   rounded-lg p-8 col-span-3 row-span-2 sm:col-start-4">
+          <GridItemWrapper className=" col-span-3 row-span-2 sm:col-start-4">
             <div>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -194,10 +197,69 @@ const WhyUs = () => {
               No in-app analytics. No middle servers. Your prompt are sent
               directly to budget.
             </p>
-          </div>
+          </GridItemWrapper>
         </div>
       </div>
     </section>
   );
 };
+
+interface GridItemWrapperProps {
+  children: React.ReactNode;
+  className: string;
+}
+
+const GridItemWrapper = ({ children, className }: GridItemWrapperProps) => {
+  const glowBorderRef = useRef<HTMLDivElement | null>(null);
+  const rawX = useMotionValue(-100);
+  const rawY = useMotionValue(-100);
+
+  const springX = useSpring(rawX, springValues);
+  const springY = useSpring(rawY, springValues);
+
+  const maskImage = useMotionTemplate`radial-gradient(100px 100px at ${springX}px ${springY}px, black, transparent)`;
+
+  useEffect(() => {
+    const glowElement = glowBorderRef.current as HTMLDivElement;
+
+    if (!glowBorderRef) return;
+
+    const updateMousePosition = (e: MouseEvent) => {
+      const { y, x } = e;
+
+      const rect = glowElement.getBoundingClientRect();
+
+      rawX.set(x - rect.x);
+      rawY.set(y - rect.y);
+    };
+
+    window.addEventListener("mousemove", updateMousePosition);
+
+    return () => {
+      window.removeEventListener("mousemove", updateMousePosition);
+    };
+  }, []);
+
+  return (
+    <motion.div
+      variants={{ onhover: {} }}
+      whileHover={"onHover"}
+      className={twMerge(
+        "border z-10 relative overflow-hidden border-gray-600/60 rounded-lg p-8 ",
+        className
+      )}
+    >
+      <motion.div
+        ref={glowBorderRef}
+        style={{
+          maskImage: maskImage,
+          WebkitMaskImage: maskImage,
+        }}
+        className="absolute w-full border-2 border-blue-4 inset-0 rounded-lg"
+      />
+      {children}
+    </motion.div>
+  );
+};
+
 export default WhyUs;
